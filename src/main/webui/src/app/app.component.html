@@ -1,0 +1,17 @@
+<div class="ntx-flex-column w-full h-full p-0">
+    <p-menubar [model]="(menuItems$ | async)!">
+        <ng-template pTemplate="start">
+            <h1 class="m-0 p-0" [routerLink]="['/landing']" style="cursor: pointer">
+                nanotx
+            </h1>
+        </ng-template>
+    </p-menubar>
+    <div class="flex-1 flex p-0">
+        <div class="side-menu-wrapper">
+            <app-side-menu [menuItems]="(sideMenuItems$ | async)!"></app-side-menu>
+        </div>
+        <div class="flex-1 overflow-hidden p-0">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

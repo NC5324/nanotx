@@ -1,0 +1,91 @@
+@import "/src/variables"
+
+p-autocomplete
+    & > span,
+    & > span > input
+        width: 100% !important
+
+p-dropdown
+    & > div
+        width: 100% !important
+        height: 100% !important
+
+p-inputnumber
+    max-height: 32px
+    & > span,
+    & > span > input
+        width: 100% !important
+        height: 100% !important
+
+p-panel
+    .p-panel-header
+        background-color: $darker-color !important
+    .p-panel-header,
+    .p-panel-footer
+        border-color: $border-color !important
+        position: sticky
+        z-index: 1000
+        bottom: 0
+    .p-panel-footer
+        border-top: 1px solid $border-color !important
+    .p-panel,
+    .p-toggleable-content
+        display: flex
+        flex-direction: column
+        height: 100% !important
+    .p-toggleable-content
+        overflow-y: scroll
+    .p-panel-content
+        flex-grow: 1
+        border-bottom: none !important
+
+button.p-button:not(.p-button-icon-only):not(.p-inputnumber-button):not(.p-panel-header-icon):not(.p-autocomplete-dropdown)
+    min-width: 90px !important
+
+p-menubar
+    .p-menubar
+        padding: 0
+        border: 1px solid $lighter-border-color
+    .p-menubar-start
+        margin: 0 6px 6px 6px !important
+        color: black
+    .p-menubar-button
+        align-self: flex-end
+
+p-password 
+    div, input
+        width: 100% !important
+
+p-menubarsub
+    width: 100%
+    .p-menubar-root-list
+        padding-right: 6px !important
+    ul
+        display: flex
+        justify-content: space-between
+        width: 100% !important
+
+p-dropdown div.p-dropdown
+    width: 100%
+
+.field
+    input, .p-dropdown
+        border: 1px solid $border-color !important
+
+p-accordion .p-accordion-tab:not(.p-accordion-tab-active)
+    & > .p-toggleable-content
+        height: 0 !important
+
+p-chip 
+    border-radius: 2px
+    & .p-chip.p-component
+        border-radius: 0 !important
+        background: inherit
+        color: inherit
+    & .p-chip-text
+        font-weight: 500
+
+p-dataView
+    .p-dataview-header
+        padding: 0 !important
+        border: none !important

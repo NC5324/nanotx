@@ -1,0 +1,24 @@
+<div
+  *appLet="{ partRequests: appState.partRequests$ | async, rowData: rowData$ | async, currentUser: auth.currentUser$ | async } as asyncData"
+  class="p-2 w-full h-full ntx-flex-column overflow-hidden">
+  <div class="mb-2">
+    <h1 *ngIf="asyncData.partRequests" class="p-0 m-0 mb-3" style="font-size: 24px">{{ 'Part requests (' + asyncData.partRequests.length + ')'  }}
+    </h1>
+    <div class="flex">
+      <div class="mr-auto">
+        <button *ngIf="!asyncData.currentUser?.isSupplier" pButton class="p-button-md" label="Create" icon="pi pi-plus"
+          (click)="openCreateRequestView()"></button>
+      </div>
+      <div class="ml-auto">
+        <button pButton label="Reset" class="p-button-md" icon="pi pi-filter-slash" (click)="clearFilters()"></button>
+        <button pButton label="Collapse all" class="p-button-md ml-1" icon="pi pi-minus" (click)="collapseAll()"></button>
+        <button pButton label="Expand all" class="p-button-md ml-1" icon="pi pi-plus" (click)="expandAll()"></button>
+        <button pButton label="Export" class="p-button-md ml-1" icon="pi pi-file-export" (click)="exportExcel()"></button>
+        <!-- <button *ngIf="asyncData.currentUser.isBuyer" pButton class="p-button-md ml-1" label="Import" icon="pi pi-file-import"></button> -->
+      </div>
+    </div>
+  </div>
+  <ag-grid-angular appGrid class="ag-theme-alpine flex-1" [defaultColDef]="defaultColDef"
+    [columnDefs]="(colDefs$ | async)!" [gridOptions]="gridOptions" [rowData]="asyncData.rowData" (gridReady)="onGridReady($event)">
+  </ag-grid-angular>
+</div>

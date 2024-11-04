@@ -1,0 +1,5 @@
+<div *appLet="menuExpanded$ | async as menuExpanded" class="ntx-side-menu" [class.expanded]="menuExpanded">
+    <button pButton *ngFor="let menuItem of menuItems$ | async" class="p-button-md p-button-text w-full"
+        [style.height.px]="40" [label]="menuItem.label || ' '" [icon]="'pi ' + menuItem.icon!"
+        [class.mt-auto]="menuItem.align === 'end'" [routerLink]="[menuItem.routerLink]" (click)="onClick(menuItem)"></button>
+</div>

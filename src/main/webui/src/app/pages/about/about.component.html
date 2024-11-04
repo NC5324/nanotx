@@ -1,0 +1,97 @@
+<div class="w-full h-full flex p-0" [ngStyle]="{ maxHeight: '100%' }">
+    <div #fullPageRef fullpage id="fullpage" class="flex-grow-1 overflow-hidden" [options]="config"
+        (ref)="getRef($event)">
+        <div class="section" style="padding: 50px">
+            <div class="ntx-flex-column" style="width: 900px; min-height: 300px">
+                <div class="flex mb-2 align-items-center" style="font-size: 42px; font-weight: 500;">
+                    <div class="text-left">Архитектура</div>
+                </div>
+                <div class="mt-4 mb-6 text-justify" style="text-indent: 50px; font-size: 16px">
+                    Архитектурата на проекта се състои от клиентска част (frontend) и сървърна част (backend). Тя се
+                    придържа към принципите на методологията REST (Representational State Transfer), като позволява
+                    комуникация между клиента и сървъра чрез стандартни HTTP заявки.
+                </div>
+                <div class="flex justify-content-center">
+                    <img src="../../../assets/architecture.png" [height]="500">
+                </div>
+            </div>
+        </div>
+        <div class="section" style="padding: 50px">
+            <div class="ntx-flex-column" style="width: 1000px; min-height: 300px">
+                <div class="flex mb-2 align-items-center" style="font-size: 42px; font-weight: 500;">
+                    <div>Frontend</div>
+                    <div class="flex justify-content-end ml-auto" style="min-width: 300px;">
+                        <img class="logo ml-3" src="../../../assets/angular.svg">
+                        <img class="logo ml-3" src="../../../assets/primeng.svg">
+                        <img class="logo ml-3" src="../../../assets/rxjs.svg">
+                        <img class="logo ml-3" src="../../../assets/ag-grid.svg">
+                    </div>
+                </div>
+                <div class="my-4 text-justify" style="text-indent: 50px; font-size: 16px; margin-bottom: 50px">
+                    Клиентската част използва основно Angular, комбиниран с PrimeNG за различни компоненти и форми, AG
+                    Grid за таблици и RxJS за управление на състоянието (state management). Той се грижи за
+                    презентацията на данните и предоставя на потребителите интерфейс за работа с тях.
+                </div>
+                <div class="my-2 text-justify" style="text-indent: 50px; font-size: 16px; margin-bottom: 50px">
+                    AG Grid е мощна библиотека за създаване на гъвкави и бързи таблици в уеб приложения. Тя предоставя
+                    богат набор от функционалности за управление на данни, филтриране, сортиране и визуализация на
+                    големи обеми от информация.
+                </div>
+                <div class="flex mb-2 align-items-center" style="font-size: 42px; font-weight: 500;">
+                    <div class="text-left">Backend</div>
+                    <div class="flex justify-content-end ml-auto" style="min-width: 300px;">
+                        <img class="logo ml-3" src="../../../assets/java.svg">
+                        <img class="logo ml-3" src="../../../assets/quarkus.svg">
+                    </div>
+                </div>
+                <div class="my-4 text-justify" style="text-indent: 50px; font-size: 16px">
+                    Сървърната част използва Java и Quarkus. Той се грижи за обработка на
+                    заявки от клиентите, осъществяване на взаимодействие с бази данни, прилагане на бизнес логика и
+                    предоставяне на необходимите данни и ресурси към клиентската страна.
+                </div>
+                <div class="my-2 text-justify" style="text-indent: 50px; font-size: 16px">
+                    Quarkus е модерна рамка за Java, предназначена за създаване
+                    на уеб приложения, базираща се на Jakarta EE стандартите. Тя се отличава с висока производителност и
+                    ефективно използване на ресурси. Quarkus поддържа различни модели на програмиране и предлага
+                    предимства като бързо време за стартиране и ниска консумация на памет.
+                </div>
+            </div>
+        </div>
+        <div class="section" style="padding: 50px">
+            <div class="ntx-flex-column" style="width: 1000px; min-height: 300px">
+                <div class="flex mb-2 align-items-center" style="font-size: 42px; font-weight: 500;">
+                    <div class="text-left">База данни и модел на данните</div>
+                    <div class="flex justify-content-end ml-auto" style="min-width: 300px;">
+                        <img class="logo ml-3" src="../../../assets/postgresql.svg">
+                    </div>
+                </div>
+                <div class="my-4 mb-6 text-justify" style="text-indent: 50px; font-size: 16px">
+                    Моделът на данните включва потребителите (t_user), с различни роли, база от електронни компоненти
+                    (t_part_masterdata), заявките и офертите за части
+                    (t_part_request и t_part_offer), и коментарите (t_part_offer_comment) и документите (t_document)
+                    свързани с тях.
+                </div>
+                <div class="flex justify-content-center">
+                    <img src="../../../assets/datamodel.png" [height]="500">
+                </div>
+            </div>
+        </div>
+        <div class="section" style="padding: 50px">
+            <div class="ntx-flex-column" style="width: 1000px; min-height: 300px">
+                <div class="flex mb-2 align-items-center" style="font-size: 42px; font-weight: 500;">
+                    <div class="text-left">Процес на приложението</div>
+                </div>
+                <div class="my-4 mb-6 text-justify" style="text-indent: 50px; font-size: 16px">
+                    Процесът на приложението започва когато купувач създаде заявка за компонент. Той има опцията да го
+                    запази в статус OPEN като чернова или да го изпрати към доставчиците като статуса се промени на
+                    SUBMITTED.
+                    Следва Създаване на оферта към заявка за компонент, коментиране и приемане или отхвърляне на
+                    офертата и завършва с потвърждение и край на доставката.
+                </div>
+                <div class="flex justify-content-center">
+                    <img src="../../../assets/appflow.png" [height]="600">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

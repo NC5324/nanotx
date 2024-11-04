@@ -1,0 +1,222 @@
+<p-panel *ngIf="asyncData$ | async as asyncData" [formGroup]="asyncData.offer.getForm()">
+    <ng-template pTemplate="header">
+        <h1 class="text-xl m-0 p-0">
+            Part request {{ asyncData.request.id }} - {{ !asyncData.offer.id ? 'New offer' : 'Offer ' +
+            asyncData.offer.id }}
+        </h1>
+    </ng-template>
+    <ng-template pTemplate="icons">
+        <button pButton pRipple type="button" icon="pi pi-times"
+            class="p-panel-header-icon p-button-rounded p-button-text" (click)="cancel()"></button>
+    </ng-template>
+    <p-accordion class="overflow-y-auto" [activeIndex]="[0, 1]" [multiple]="true">
+        <p-accordionTab header="Exchange details">
+            <div class="flex flex-wrap">
+                <div class="grid flex-1 xl:w-8">
+                    <div class="col-12 sm:col-6 md:col-4 flex align-items-center">
+                        <span class="font-medium mr-2">Request status:</span>
+                        <p-chip [label]="asyncData.request.stateLabel"
+                            [style.background]="asyncData.request.stateBackground"></p-chip>
+                    </div>
+                    <div class="col-12 sm:col-6 md:col-8 flex align-items-center">
+                        <span class="font-medium mr-2">Offer status:</span>
+                        <p-chip [label]="asyncData.offer.stateLabel"
+                            [style.background]="asyncData.offer.stateBackground"></p-chip>
+                    </div>
+                    <div class="col-12 sm:col-6 md:col-4"><span class="font-medium">Component name: </span>{{
+                        asyncData.request.componentName }}</div>
+                    <div class="col-12 sm:col-6 md:col-4"><span class="font-medium">Type: </span>{{
+                        asyncData.request.componentType }}</div>
+                    <div class="col-12 sm:col-6 md:col-4"><span class="font-medium">Category: </span>{{
+                        asyncData.request.category }}</div>
+                    <div class="col-12 sm:col-6 md:col-4"><span class="font-medium">Manufacturer: </span>{{
+                        asyncData.request.manufacturer }}</div>
+                    <div class="col-12 sm:col-6 md:col-4"><span class="font-medium">Part number: </span>{{
+                        asyncData.request.partNumber }}</div>
+                    <div class="col-12 sm:col-6 md:col-4"><span class="font-medium">Alternate part number: </span>{{
+                        asyncData.request.alternatePartNumber }}</div>
+                    <div class="col-12 sm:col-6 md:col-4"><span class="font-medium">Quantity: </span>{{
+                        asyncData.request.quantity }}</div>
+                    <div class="col-12 sm:col-6 md:col-8"><span class="font-medium">Price / piece: </span>{{
+                        currencyFormatter(asyncData.request.currency).format(asyncData.request.targetPrice!) }}</div>
+                    <div class="col-12 sm:col-6 md:col-4"><span class="font-medium">Min. Temp °C: </span>{{
+                        asyncData.request.minTemp }}</div>
+                    <div class="col-12 sm:col-6 md:col-4"><span class="font-medium">Max. Temp °C: </span>{{
+                        asyncData.request.maxTemp }}</div>
+                </div>
+                <div *ngIf="asyncData.offer.orderDetails" class="grid">
+                    <div class="col-12"><span class="font-medium">Delivery address: </span>{{
+                        asyncData.offer.orderDetails.address + ' ' + asyncData.offer.orderDetails.address2 }}</div>
+                    <div class="col-12"><span class="font-medium">Delivery country: </span>{{
+                       asyncData.offer.orderDetails.country }}</div>
+                    <div class="col-12"><span class="font-medium">Delivery city: </span>{{
+                        asyncData.offer.orderDetails.city }}</div>
+                    <div class="col-12"><span class="font-medium">Delivery phone number: </span>{{
+                        asyncData.offer.orderDetails.phoneNumber }}</div>
+                </div>
+            </div>
+        </p-accordionTab>
+        <p-accordionTab header="Offer details">
+            <p-toolbar class="w-full">
+                <div class="p-toolbar-group-start">
+                    <p-dropdown id="type" [(ngModel)]="selectedVersion" [ngModelOptions]="{ standalone: true }"
+                        [options]="(appState.partOfferVersions$ | async)!" [autoDisplayFirst]="false" dataKey="id"
+                        optionLabel="label" optionValue="value" (onChange)="onVersionSelected($event)">
+                        <ng-template pTemplate="item" let-item>
+                            <div class="flex align-items-center">
+                                <span class="mr-2">{{ item.label }}</span>
+                                <p-chip class="ml-auto" [label]="item.value.stateLabel"
+                                    [style.background]="item.value.stateBackground"></p-chip>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                    <p-toggleButton *ngIf="appState.partOfferEditable$ | async" class="ml-1"
+                        formControlName="autofillEnabled" [onLabel]="'Autofill ON'" [onIcon]="'pi pi-check'"
+                        [offLabel]="'Autofill OFF'" [offIcon]="'pi pi-times'"></p-toggleButton>
+                </div>
+                <div class="p-toolbar-group-end">
+                    <button pButton class="p-button-md" label="Fill from request" icon="pi pi-copy"
+                        [disabled]="!(appState.partOfferEditable$ | async)"
+                        (click)="fillFromRequest(asyncData.offer, asyncData.request)"></button>
+                    <button pButton class="p-button-md p-button-secondary ml-1" label="Reset" icon="pi pi-ban"
+                        [disabled]="!(appState.partOfferEditable$ | async)"
+                        (click)="asyncData.offer.getForm().reset()"></button>
+                </div>
+            </p-toolbar>
+            <div class="formgrid grid w-full xl:w-8 mt-2">
+                <div class="field col-12 sm:col-6 md:col-4">
+                    <label for="componentName">Component name</label>
+                    <p-autoComplete id="componentName" class="w-full" formControlName="componentName"
+                        [suggestions]="(appState.masterDataSuggestions$['componentName'] | async)!" [dropdown]="true"
+                        (completeMethod)="appState.masterDataSearch$.componentName.next($event.query)"
+                        (onSelect)="autofill($event, asyncData.offer.getForm())">
+                        <ng-template pTemplate="item" let-item>
+                            {{ item.componentName }}
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+                <div class="field col-12 sm:col-6 md:col-4 ntx-flex-column">
+                    <label for="type">Type</label>
+                    <p-dropdown id="type" class="w-full flex-1" formControlName="componentType"
+                        [autoDisplayFirst]="false" [options]="appState.componentTypeOptions" optionLabel="label"
+                        optionValue="value"></p-dropdown>
+                </div>
+                <div class="field col-12 sm:col-6 md:col-4">
+                    <label for="category">Category</label>
+                    <p-autoComplete id="category" class="ml-1 w-full" formControlName="category"
+                        [suggestions]="(appState.masterDataSuggestions$['category'] | async)!" [dropdown]="true"
+                        (completeMethod)="appState.masterDataSearch$.category.next($event.query)"
+                        (onSelect)="autofill($event, asyncData.offer.getForm())">
+                        <ng-template pTemplate="item" let-item>
+                            {{ item.category }}
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+                <div class="field col-12 sm:col-6 md:col-4">
+                    <label for="manufacturer">Manufacturer</label>
+                    <p-autoComplete id="manufacturer" class="w-full" formControlName="manufacturer"
+                        [suggestions]="(appState.masterDataSuggestions$['manufacturer'] | async)!" [dropdown]="true"
+                        (completeMethod)="appState.masterDataSearch$.manufacturer.next($event.query)"
+                        (onSelect)="autofill($event, asyncData.offer.getForm())">
+                        <ng-template pTemplate="item" let-item>
+                            {{ item.manufacturer }}
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+                <div class="field col-12 sm:col-6 md:col-4">
+                    <label for="partNumber">Part number</label>
+                    <p-autoComplete id="partNumber" class="ml-1 w-full" formControlName="partNumber"
+                        [suggestions]="(appState.masterDataSuggestions$['partNumber'] | async)!" [dropdown]="true"
+                        (completeMethod)="appState.masterDataSearch$.partNumber.next($event.query)"
+                        (onSelect)="autofill($event, asyncData.offer.getForm())">
+                        <ng-template pTemplate="item" let-item>
+                            {{ item.partNumber }}
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+                <div class="field col-12 sm:col-6 md:col-4">
+                    <label for="alternatePartNumber">Alternate part number</label>
+                    <p-autoComplete id="alternatePartNumber" class="ml-1 w-full" formControlName="alternatePartNumber"
+                        [suggestions]="(appState.masterDataSuggestions$['alternatePartNumber'] | async)!"
+                        [dropdown]="true"
+                        (completeMethod)="appState.masterDataSearch$.alternatePartNumber.next($event.query)"
+                        (onSelect)="autofill($event, asyncData.offer.getForm())">
+                        <ng-template pTemplate="item" let-item>
+                            {{ item.alternatePartNumber }}
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+                <div class="field col-12 md:col-4 ntx-flex-column">
+                    <label for="quantity">Quantity</label>
+                    <p-inputNumber id="quantity" class="w-full flex-1" [showButtons]="true"
+                        formControlName="quantity"></p-inputNumber>
+                </div>
+                <div class="field col-12 sm:col-6 md:col-4 ntx-flex-column">
+                    <label for="price">Price / piece</label>
+                    <p-inputNumber id="price" class="ml-1 w-full flex-1" formControlName="targetPrice"></p-inputNumber>
+                </div>
+                <div class="field col-12 sm:col-6 md:col-4 ntx-flex-column">
+                    <label for="currency">Currency</label>
+                    <p-dropdown id="currency" class="ml-1 w-full flex-1" formControlName="currency"
+                        [autoDisplayFirst]="false" [options]="appState.currencyOptions"></p-dropdown>
+                </div>
+                <div class="field col-12 sm:col-6 md:col-4 ntx-flex-column">
+                    <label for="minTemp">Min. Temp °C</label>
+                    <p-inputNumber id="minTemp" class="w-full flex-1" [showButtons]="true"
+                        formControlName="minTemp"></p-inputNumber>
+                </div>
+                <div class="field col-12 sm:col-6 md:col-4 ntx-flex-column">
+                    <label for="maxTemp">Max. Temp °C</label>
+                    <p-inputNumber id="maxTemp" class="ml-1 w-full flex-1" [showButtons]="true"
+                        formControlName="maxTemp"></p-inputNumber>
+                </div>
+            </div>
+        </p-accordionTab>
+        <p-accordionTab header="Documents">
+            <div class="flex mb-1">
+                <p-fileUpload mode="basic" [multiple]="true" [customUpload]="true" [auto]="true"
+                    [disabled]="!asyncData.offer.id" (onSelect)="uploadDocuments($event)" chooseLabel="Upload"
+                    chooseIcon="pi pi-upload"></p-fileUpload>
+                <button pButton class="p-button-md p-button-outlined ml-1" label="Download all" icon="pi pi-download"
+                    [disabled]="!asyncData.offer.id" (click)="downloadAllDocuments()"></button>
+            </div>
+            <app-documents-table [documents]="asyncData.offer.documents" (documentRemove)="removeDocument($event)"
+                (gridReady)="onDocumentsGridReady($event)"></app-documents-table>
+        </p-accordionTab>
+        <p-accordionTab header="Comments">
+            <app-part-offer-comments></app-part-offer-comments>
+        </p-accordionTab>
+    </p-accordion>
+    <ng-template pTemplate="footer">
+        <div class="flex align-items-center">
+            <div class="mr-auto">
+                <button pButton *ngIf="asyncData.offer.canSetState(PartOfferState.SUBMITTED, asyncData.currentUser)"
+                    class="p-button-md mr-1" label="Submit" icon="pi pi-send"
+                    (click)="save(PartOfferState.SUBMITTED)"></button>
+                <button pButton *ngIf="asyncData.offer.canSetState(asyncData.offer.state, asyncData.currentUser)"
+                    class="p-button-md mr-1" label="Save" icon="pi pi-save" (click)="save()"></button>
+                <button pButton
+                    *ngIf="asyncData.offer.canSetState(PartOfferState.OPEN, asyncData.currentUser) && asyncData.offer.state !== PartOfferState.OPEN"
+                    class="p-button-md mr-1" label="Create new version" icon="pi pi-save"
+                    (click)="saveAsVersion(PartOfferState.OPEN)"></button>
+                <button pButton *ngIf="asyncData.offer.canSetState(PartOfferState.WITHDRAWN, asyncData.currentUser)"
+                    class="p-button-md mr-1" label="Withdraw" icon="pi pi-ban"
+                    (click)="save(PartOfferState.WITHDRAWN)"></button>
+                <button pButton *ngIf="asyncData.offer.canSetState(PartOfferState.ACCEPTED, asyncData.currentUser)"
+                    class="p-button-md mr-1" label="Accept" icon="pi pi-check" (click)="accept()"></button>
+                <button pButton *ngIf="asyncData.offer.canSetState(PartOfferState.REJECTED, asyncData.currentUser)"
+                    class="p-button-md mr-1" label="Reject" icon="pi pi-times" (click)="reject()"></button>
+                <button pButton
+                    *ngIf="asyncData.offer.canSetState(PartOfferState.ORDER_CONFIRMED, asyncData.currentUser)"
+                    class="p-button-md mr-1" label="Confirm order" icon="pi pi-box"
+                    (click)="confirmOrder()"></button>
+                <button pButton
+                    *ngIf="asyncData.offer.canSetState(PartOfferState.ORDER_COMPLETED, asyncData.currentUser)"
+                    class="p-button-md mr-1" label="Confirm completed" icon="pi pi-box"
+                    (click)="save(PartOfferState.ORDER_COMPLETED)"></button>
+                <button pButton class="p-button-md p-button-outlined mr-1" label="Close" icon="pi pi-chevron-right"
+                    (click)="cancel()"></button>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>

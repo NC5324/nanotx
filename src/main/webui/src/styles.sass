@@ -1,0 +1,103 @@
+@import "/node_modules/primeflex/primeflex.css"
+@import "ag-grid-community/styles/ag-grid.css"
+@import "ag-grid-community/styles/ag-theme-alpine.css"
+@import "/src/helpers"
+@import "/src/variables"
+@import "/src/primeng"
+@import "/src/ag-grid"
+
+*
+    box-sizing: border-box
+    &:focus
+        box-shadow: none !important
+    &:not(.pi):not(.ag-icon)
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important
+
+html, body
+    // prime-ng components scale based on this
+    font-size: 13px
+    background-color: darken(white, 1.1%) !important
+    height: 100%
+    width: 100%
+    margin: 0
+
+.side-menu-wrapper
+    max-height: calc(100vh - 40px)
+    background: white !important
+
+.cdk-overlay-container,.cdk-global-overlay-wrapper
+    pointer-events: none
+    top: 0
+    left: 0
+    height: 100%
+    width: 100%
+
+.cdk-overlay-container
+    position: fixed
+    z-index: 1000
+
+.cdk-overlay-container:empty
+    display: none
+
+.cdk-global-overlay-wrapper
+    display: flex
+    position: absolute
+    z-index: 1000
+
+.cdk-overlay-pane
+    position: absolute
+    pointer-events: auto
+    box-sizing: border-box
+    z-index: 1000
+    display: flex
+    max-width: 100%
+    max-height: 100%
+    background-color: white
+    animation: reveal 0.25s forwards
+
+.cdk-overlay-backdrop
+    position: absolute
+    inset: 0
+    z-index: 1000
+    pointer-events: auto
+    -webkit-tap-highlight-color: transparent
+    transition: opacity .4s cubic-bezier(.25,.8,.25,1)
+    opacity: 0
+
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing
+    opacity: 1
+
+.cdk-high-contrast-active .cdk-overlay-backdrop.cdk-overlay-backdrop-showing
+    opacity: .6
+
+.cdk-overlay-dark-backdrop
+    background: rgba(0,0,0,.32)
+
+.cdk-overlay-transparent-backdrop,.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing
+    opacity: 0
+
+.cdk-overlay-connected-position-bounding-box
+    position: absolute
+    z-index: 1000
+    display: flex
+    flex-direction: column
+    min-width: 1px
+    min-height: 1px
+
+.cdk-global-scrollblock
+    position: fixed
+    width: 100%
+    overflow-y: scroll
+
+.stripe-input
+    padding: 6.5px !important
+    border-radius: 2px !important
+    border: 1px solid #babfc7 !important
+    color: #323130 !important
+    box-shadow: none !important
+  
+@keyframes reveal
+    from
+        clip-path: inset(0 0 0 100%)
+    to
+        clip-path: inset(0 0 0 0)

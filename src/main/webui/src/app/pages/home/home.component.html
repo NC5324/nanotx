@@ -1,0 +1,7 @@
+<div class="ntx-flex-column px-5 w-full h-full">
+    <h1 [ngStyle]="{ fontSize: '120px', padding: 0, margin: '200px 0 0' }">nanotx</h1>
+    <div class="flex">
+        <button pButton class="p-button-md ml-2" label="Learn more" [routerLink]="['/about']"></button>
+        <button pButton class="p-button-md ml-1" [label]="(auth.authenticated$ | async) ? 'Overview' : 'Sign-in'" [routerLink]="['/login']"></button>
+    </div>
+</div>

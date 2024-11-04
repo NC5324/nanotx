@@ -1,0 +1,114 @@
+<p-panel *ngIf="appState.partRequest$ | async as partRequest" [formGroup]="partRequest.getForm()">
+    <ng-template pTemplate="header">
+        <h1 class="text-xl m-0 p-0">{{ partRequest.id ? 'Part request ' + partRequest.id : 'Create part request' }}</h1>
+    </ng-template>
+    <ng-template pTemplate="icons">
+        <button pButton pRipple type="button" icon="pi pi-times"
+            class="p-panel-header-icon p-button-rounded p-button-text" (click)="cancel()"></button>
+    </ng-template>
+    <p-toolbar *ngIf="appState.partRequestEditable$ | async" class="w-full">
+        <div class="p-toolbar-group-start">
+            <p-toggleButton class="mr-1" formControlName="autofillEnabled" [onLabel]="'Autofill ON'"
+                [onIcon]="'pi pi-check'" [offLabel]="'Autofill OFF'" [offIcon]="'pi pi-times'"></p-toggleButton>
+        </div>
+        <div class="p-toolbar-group-end">
+            <button pButton class="p-button-md p-button-secondary" label="Reset" icon="pi pi-ban"
+                (click)="partRequest.getForm().reset()"></button>
+        </div>
+    </p-toolbar>
+    <div class="formgrid grid w-full xl:w-8 mt-2">
+        <div class="field col-12 sm:col-6 md:col-4">
+            <label for="componentName">Component name</label>
+            <p-autoComplete id="componentName" class="w-full" formControlName="componentName"
+                [suggestions]="(appState.masterDataSuggestions$['componentName'] | async)!" [dropdown]="true"
+                (completeMethod)="appState.masterDataSearch$.componentName.next($event.query)"
+                (onSelect)="autofill($event, partRequest.getForm())">
+                <ng-template pTemplate="item" let-item>
+                    {{ item.componentName }}
+                </ng-template>
+            </p-autoComplete>
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 ntx-flex-column">
+            <label for="type">Type</label>
+            <p-dropdown id="type" class="w-full flex-1" formControlName="componentType" [autoDisplayFirst]="false"
+                [options]="appState.componentTypeOptions" optionLabel="label" optionValue="value"></p-dropdown>
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4">
+            <label for="category">Category</label>
+            <p-autoComplete id="category" class="ml-1 w-full" formControlName="category"
+                [suggestions]="(appState.masterDataSuggestions$['category'] | async)!" [dropdown]="true"
+                (completeMethod)="appState.masterDataSearch$.category.next($event.query)"
+                (onSelect)="autofill($event, partRequest.getForm())">
+                <ng-template pTemplate="item" let-item>
+                    {{ item.category }}
+                </ng-template>
+            </p-autoComplete>
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4">
+            <label for="manufacturer">Manufacturer</label>
+            <p-autoComplete id="manufacturer" class="w-full" formControlName="manufacturer"
+                [suggestions]="(appState.masterDataSuggestions$['manufacturer'] | async)!" [dropdown]="true"
+                (completeMethod)="appState.masterDataSearch$.manufacturer.next($event.query)"
+                (onSelect)="autofill($event, partRequest.getForm())">
+                <ng-template pTemplate="item" let-item>
+                    {{ item.manufacturer }}
+                </ng-template>
+            </p-autoComplete>
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4">
+            <label for="partNumber">Part number</label>
+            <p-autoComplete id="partNumber" class="ml-1 w-full" formControlName="partNumber"
+                [suggestions]="(appState.masterDataSuggestions$['partNumber'] | async)!" [dropdown]="true"
+                (completeMethod)="appState.masterDataSearch$.partNumber.next($event.query)"
+                (onSelect)="autofill($event, partRequest.getForm())">
+                <ng-template pTemplate="item" let-item>
+                    {{ item.partNumber }}
+                </ng-template>
+            </p-autoComplete>
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4">
+            <label for="alternatePartNumber">Alternate part number</label>
+            <p-autoComplete id="alternatePartNumber" class="ml-1 w-full" formControlName="alternatePartNumber"
+                [suggestions]="(appState.masterDataSuggestions$['alternatePartNumber'] | async)!" [dropdown]="true"
+                (completeMethod)="appState.masterDataSearch$.alternatePartNumber.next($event.query)"
+                (onSelect)="autofill($event, partRequest.getForm())">
+                <ng-template pTemplate="item" let-item>
+                    {{ item.alternatePartNumber }}
+                </ng-template>
+            </p-autoComplete>
+        </div>
+        <div class="field col-12 md:col-4 ntx-flex-column">
+            <label for="quantity">Quantity</label>
+            <p-inputNumber id="quantity" class="w-full flex-1" [showButtons]="true" formControlName="quantity">
+            </p-inputNumber>
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 ntx-flex-column">
+            <label for="price">Price / piece</label>
+            <p-inputNumber id="price" class="ml-1 w-full flex-1" formControlName="targetPrice"> </p-inputNumber>
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 ntx-flex-column">
+            <label for="currency">Currency</label>
+            <p-dropdown id="currency" class="ml-1 w-full flex-1" formControlName="currency" [autoDisplayFirst]="false"
+                [options]="appState.currencyOptions"></p-dropdown>
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 ntx-flex-column">
+            <label for="minTemp">Min. Temp °C</label>
+            <p-inputNumber id="minTemp" class="w-full flex-1" [showButtons]="true" formControlName="minTemp">
+            </p-inputNumber>
+        </div>
+        <div class="field col-12 sm:col-6 md:col-4 ntx-flex-column">
+            <label for="maxTemp">Max. Temp °C</label>
+            <p-inputNumber id="maxTemp" class="ml-1 w-full flex-1" [showButtons]="true" formControlName="maxTemp">
+            </p-inputNumber>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="flex align-items-center">
+            <div class="mr-auto">
+                <button *ngIf="appState.partRequestEditable$ | async" pButton class="p-button-md" label="Submit" icon="pi pi-save" (click)="save()"></button>
+                <button pButton class="p-button-md p-button-outlined ml-1" label="Close" icon="pi pi-chevron-right"
+                    (click)="cancel()"></button>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>

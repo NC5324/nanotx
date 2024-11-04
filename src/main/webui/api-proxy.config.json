@@ -1,0 +1,10 @@
+[
+  {
+    "context": ["/api", "/j_security_check"],
+    "target": "http://localhost:8080",
+    "autoRewrite": true,
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+]

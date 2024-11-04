@@ -1,0 +1,16 @@
+<p-panel header="New comment" [formGroup]="comment.getForm()">
+    <ng-template pTemplate="icons">
+        <button pButton pRipple type="button" icon="pi pi-times"
+            class="p-panel-header-icon p-button-rounded p-button-text" (click)="cancel()"></button>
+    </ng-template>
+    <p-editor formControlName="content" [style]="{ height: '150px' }"></p-editor>
+    <ng-template pTemplate="footer">
+        <div class="flex align-items-center">
+            <div class="mr-auto">
+                <button pButton class="p-button-md" label="Save" icon="pi pi-save" (click)="save()"></button>
+                <button pButton class="p-button-md p-button-outlined ml-1" label="Cancel" icon="pi pi-times"
+                    (click)="cancel()"></button>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>

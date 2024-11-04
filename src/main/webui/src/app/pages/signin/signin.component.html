@@ -1,0 +1,18 @@
+<div class="w-full h-full flex">
+  <form class="m-auto ntx-flex-column" [formGroup]="loginForm" (submit)="authenticate()">
+    <h1 class="text-center">Sign in</h1>
+    <div class="field">
+      <label for="login">Username</label>
+      <input pInputText class="w-full" type="text" formControlName="username" />
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <p-password id="password" formControlName="password" [toggleMask]="true" [feedback]="false"></p-password>
+    </div>
+    <div class="field flex">
+      <button pButton class="p-button-md flex-grow-1 mr-1" type="submit" label="Sign in"></button>
+      <button pButton class="p-button-md p-button-outlined flex-grow-1" type="button" label="Sign up"
+        [routerLink]="['/register']"></button>
+    </div>
+  </form>
+</div>

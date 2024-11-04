@@ -1,0 +1,25 @@
+<p-dataView *appLet="appState.partOffer$ | async as offer" #dv [value]="(appState.partOfferComments$ | async)!"
+    [paginator]="true" [rows]="5">
+    <ng-template pTemplate="header">
+        <div class="flex align-items-center">
+            <button pButton class="p-button-md" label="Add comment" icon="pi pi-plus" [disabled]="!offer.id"
+                (click)="addComment()"></button>
+        </div>
+    </ng-template>
+    <ng-template let-comment pTemplate="listItem">
+        <div class="ntx-dataview-item ntx-flex-column col-12 mt-2">
+            <div class="ntx-dataview-item-header ntx-flex-column">
+                <div class="font-bold">{{ comment.creator.displayName }}</div>
+                <div *ngIf="comment.offer" class="flex align-items-center">
+                    <a class="font-bold mt-1" href="#" (click)="viewOfferVersion(comment.offerId)">
+                        {{ 'Offer ' + comment.offer.id + ' (' + (comment.offer.created | date: 'MMM dd, YYYY @ hh:mm a') + ') ' }}
+                    </a>
+                    <p-chip class="ml-1" [label]="comment.offer.stateLabel"
+                        [style.background]="comment.offer.stateBackground"></p-chip>
+                </div>
+                <div class="font-sm mt-1">{{ comment.created | date: 'MMM dd, YYYY @ hh:mm a' }}</div>
+            </div>
+            <div class="ntx-dataview-item-content mt-1" [innerHTML]="comment.content"></div>
+        </div>
+    </ng-template>
+</p-dataView>

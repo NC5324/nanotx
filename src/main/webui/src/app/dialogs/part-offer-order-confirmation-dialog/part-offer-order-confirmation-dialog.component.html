@@ -1,0 +1,32 @@
+<p-panel header="Confirm order" [formGroup]="form">
+    <ng-template pTemplate="icons">
+        <button pButton pRipple type="button" icon="pi pi-times"
+            class="p-panel-header-icon p-button-rounded p-button-text" (click)="cancel()"></button>
+    </ng-template>
+    <div class="ntx-flex-column">
+        <div class="flex mb-1">
+            <p-fileUpload mode="basic" [multiple]="true" [customUpload]="true" [auto]="true"
+                (onSelect)="uploadDocuments($event)" chooseLabel="Upload" chooseIcon="pi pi-upload"></p-fileUpload>
+            <button pButton class="p-button-md p-button-outlined ml-1" label="Download all" icon="pi pi-download"
+                (click)="downloadAllDocuments()"></button>
+        </div>
+        <app-documents-table [documents]="form.value.documents!" (documentRemove)="removeDocument($event)"
+            (gridReady)="onDocumentsGridReady($event)"></app-documents-table>
+        <div class="flex mt-2">
+            <p-checkbox class="mr-2" formControlName="confirmation" inputId="confirmation" [binary]="true"></p-checkbox>
+            <label for="confirmation"><span class="font-medium">I hereby confirm that I've read and agree to the
+                    delivery conditions. </span>(The buyer will be informed of your decision. Please note that you
+                cannot undo this action.)<br></label>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="flex align-items-center">
+            <div class="mr-auto">
+                <button pButton class="p-button-md" label="Save" icon="pi pi-save" [disabled]="!form.valid"
+                    (click)="save()"></button>
+                <button pButton class="p-button-md p-button-outlined ml-1" label="Cancel" icon="pi pi-times"
+                    (click)="cancel()"></button>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>

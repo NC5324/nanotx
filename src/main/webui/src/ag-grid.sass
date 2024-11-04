@@ -1,0 +1,28 @@
+@import "/src/variables"
+
+ag-grid-angular
+  &.borders-enabled
+    .ag-ltr
+      .ag-cell
+        border-right: 1px solid var(--ag-row-border-color, var(--ag-secondary-border-color, #dde2eb))
+  .ag-header-cell, 
+  .ag-side-bar
+    background-color: $darker-color
+  .ag-cell,
+  .ag-cell-wrapper
+    width: 100%
+    height: 100%
+    button.p-button, p-button
+      display: flex
+  .ag-checkbox-input-wrapper.ag-checked::after,
+  .ag-checkbox-input-wrapper::after
+    font-family: var(--ag-icon-font-family) !important
+  .ag-ltr
+    .ag-row-group-leaf-indent
+      margin-left: 0 !important
+      &.ag-row-group-indent-0
+        .ag-group-expanded.ag-hidden
+          + .ag-group-contracted.ag-hidden
+            + .ag-group-checkbox.ag-invisible
+              + .ag-group-value
+                margin-left: 28px !important 

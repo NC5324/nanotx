@@ -1,0 +1,5 @@
+<div class="w-full h-full flex align-items-center">
+  <p-button *ngFor="let button of params.buttons" class="p-button-md" [class.mr-1]="params.buttons.length > 1"
+    [icon]="button.icon!" [styleClass]="button.styleClass!" [disabled]="(disabled$(button) | async)!"
+    (click)="onClick(button)"></p-button>
+</div>
